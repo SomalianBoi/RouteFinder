@@ -1,0 +1,131 @@
+﻿@model IEnumerable<Finder.Domain.Entities.Dtos.AirlineViewModel>
+
+@{
+    ViewData["Title"] = "Airlines Index";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        margin: 20px auto;
+        max-width: 900px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    .button-group a {
+        text-decoration: none;
+        margin-right: 10px;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color: white;
+    }
+
+        .button-group a.edit {
+            background-color: #ffc107;
+        }
+
+        .button-group a.details {
+            background-color: #17a2b8;
+        }
+
+        .button-group a.delete {
+            background-color: #dc3545;
+        }
+
+    .no-flights {
+        color: gray;
+        font-style: italic;
+    }
+
+    ul {
+        padding-left: 20px;
+    }
+</style>
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <p>
+        <a asp-action="Create" style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">Create New Airline</a>
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Alias)</th>
+                <th>@Html.DisplayNameFor(model => model.Country)</th>
+                <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+                <th>Flights</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Alias)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Country)</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td>
+                        @if (item.Flights.Any())
+                        {
+                            <ul>
+                                @foreach (var flight in item.Flights)
+                                {
+                                    <li>
+                                        @flight.SourceAirportNavigation?.IataCode → @flight.DestinationAirportNavigation?.IataCode
+                                        (Stops: @flight.Stops)
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="no-flights">No flights yet</p>
+                        }
+                    </td>
+                    <td class="button-group">
+                        <a asp-action="Edit" asp-route-id="@item.AirlineId" class="edit">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.AirlineId" class="details">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.AirlineId" class="delete">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

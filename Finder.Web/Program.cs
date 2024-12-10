@@ -1,3 +1,6 @@
+using Finder.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Finder.Web
 {
     public class Program
@@ -8,7 +11,8 @@ namespace Finder.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddDbContext<ApplicationDbContext>(option => 
+            option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
