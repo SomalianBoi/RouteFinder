@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Finder.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Finder.Domain.Entities.Dtos
+namespace Finder.Application.DTOs
 {
     public class AirlineViewModel
     {
@@ -12,10 +13,7 @@ namespace Finder.Domain.Entities.Dtos
         public required string Name { get; set; }
         public required string Alias { get; set; }
         public string? Country { get; set; }
-        public List<Flight> Flights { get; set; } = new();
-        public bool IsActive { get; set; } // Active status
-
-        // Derived property for total number of flights
-        public int TotalFlights => Flights.Count;
+        public bool IsActive { get; set; }
+        public List<Flight>? Flights { get; set; }
     }
 }

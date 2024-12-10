@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Finder.Domain\Finder.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,63 @@
+﻿@model Finder.Application.DTOs.AirlineDetailsDto
+
+@{
+    ViewData["Title"] = "Airline Details";
+}
+
+<h2>Airline Details</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Alias</dt>
+            <dd class="col-sm-9">@Model.Alias</dd>
+
+            <dt class="col-sm-3">IATA</dt>
+            <dd class="col-sm-9">@Model.IATA</dd>
+
+            <dt class="col-sm-3">ICAO</dt>
+            <dd class="col-sm-9">@Model.ICAO</dd>
+
+            <dt class="col-sm-3">Callsign</dt>
+            <dd class="col-sm-9">@Model.Callsign</dd>
+
+            <dt class="col-sm-3">Country</dt>
+            <dd class="col-sm-9">@Model.Country</dd>
+
+            <dt class="col-sm-3">Is Active</dt>
+            <dd class="col-sm-9">@((Model.IsActive ? "Yes" : "No"))</dd>
+
+
+            <!-- Flights Section -->
+            <dt class="col-sm-3">Flights</dt>
+            <dd class="col-sm-9">
+                @if (Model.Flights.Any())
+                {
+                    <ul>
+                        @foreach (var flight in Model.Flights)
+                        {
+                            <li>
+                                @flight.SourceAirportNavigation?.IataCode → @flight.DestinationAirportNavigation?.IataCode
+                                (Stops: @flight.Stops)
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="no-flights">No flights yet</p>
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer text-muted">
+        <a href="@Url.Action("Index", "Airline")" class="btn btn-secondary">Back to List</a>
+        <a href="@Url.Action("Edit", "Airline", new { id = Model.AirlineId })" class="btn btn-primary">Edit</a>
+    </div>
+</div>

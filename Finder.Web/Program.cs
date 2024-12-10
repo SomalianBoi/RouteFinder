@@ -1,4 +1,8 @@
+using Finder.Application.Interfaces;
+using Finder.Application.Services;
+using Finder.Domain.RepoInterfaces;
 using Finder.Infrastructure.Data;
+using Finder.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Finder.Web
@@ -13,6 +17,10 @@ namespace Finder.Web
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(option => 
             option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<IAirlineService, AirlineService>();
+            builder.Services.AddScoped<IAirlineRepository, AirlineRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

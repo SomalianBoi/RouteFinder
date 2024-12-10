@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Finder.Application\Finder.Application.csproj" />
     <ProjectReference Include="..\Finder.Infrastructure\Finder.Infrastructure.csproj" />
   </ItemGroup>
 
