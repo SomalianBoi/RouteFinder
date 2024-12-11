@@ -28,5 +28,21 @@ namespace Finder.Infrastructure.Repository
                 .ThenInclude(f => f.airline)
                 .ToListAsync();
         }
+        public async Task AddPlaneAsync(Plane plane)
+        {
+            await _context.AddAsync(plane);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeletePlaneAsync(Guid planeId)
+        {
+            var plane = await _context.Planes.FirstOrDefaultAsync(p => p.PlaneId == planeId);
+
+            if(plane == null)
+            {
+                throw new KeyNotFoundException($"Plane with id {planeId} not found");
+            }
+            _context.Planes.Remove(plane);
+            await _context.SaveChangesAsync();
+        }
     }
 }

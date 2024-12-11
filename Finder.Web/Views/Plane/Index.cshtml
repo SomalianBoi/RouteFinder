@@ -98,8 +98,6 @@
                         }
                     </td>
                     <td class="button-group">
-                        <a asp-action="Edit" asp-route-id="@plane.PlaneId" class="edit">Edit</a>
-                        <a asp-action="Details" asp-route-id="@plane.PlaneId" class="details">Details</a>
                         <form method="post" asp-action="Delete" asp-controller="Plane">
                             <input type="hidden" name="id" value="@plane.PlaneId" />
                             @Html.AntiForgeryToken()

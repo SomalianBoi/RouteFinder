@@ -10,5 +10,7 @@ namespace Finder.Domain.RepoInterfaces
     public interface IPlaneRepository
     {
         Task<IEnumerable<Plane>> GetAllPlanes();
+        Task AddPlaneAsync(Plane plane);
+        Task DeletePlaneAsync(Guid planeId);
     }
 }

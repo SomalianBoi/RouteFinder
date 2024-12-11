@@ -10,5 +10,7 @@ namespace Finder.Application.Interfaces
     public interface IPlaneService
     {
         Task<IEnumerable<PlaneViewModel>> GetAllPlanes();
+        Task CreatePlaneAsync(CreatePlaneDto planeDto);
+        Task DeletePlaneAsync(Guid planeId);
     }
 }
