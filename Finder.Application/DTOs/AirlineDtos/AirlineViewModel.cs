@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Finder.Application.DTOs
+namespace Finder.Application.DTOs.AirlineDtos
 {
     public class AirlineViewModel
     {

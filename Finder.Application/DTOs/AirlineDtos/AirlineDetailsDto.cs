@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Finder.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Finder.Application.DTOs
+namespace Finder.Application.DTOs.AirlineDtos
 {
-    public class CreateAirlineViewModel
+    public class AirlineDetailsDto
     {
         public Guid AirlineId { get; set; } // Unique OpenFlights identifier for this airline
         public required string Name { get; set; } // Name of the airline
@@ -16,5 +17,7 @@ namespace Finder.Application.DTOs
         public required string Callsign { get; set; } // Airline callsign, nullable
         public string? Country { get; set; } // Country where the airline is based
         public bool IsActive { get; set; } // Active status: true for "Y", false for "N"
+
+        public ICollection<Flight>? Flights { get; set; } // Flights carried out by the airline
     }
 }

@@ -1,4 +1,4 @@
-﻿using Finder.Application.DTOs;
+﻿using Finder.Application.DTOs.AirlineDtos;
 using Finder.Application.Interfaces;
 using Finder.Domain.Entities;
 using Finder.Domain.RepoInterfaces;

@@ -1,4 +1,4 @@
-﻿using Finder.Application.DTOs;
+﻿using Finder.Application.DTOs.AirlineDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
