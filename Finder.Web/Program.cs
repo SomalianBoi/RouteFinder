@@ -24,6 +24,9 @@ namespace Finder.Web
             builder.Services.AddScoped<IPlaneService, PlaneService>();
             builder.Services.AddScoped<IPlaneRepository, PlaneRepository>();
 
+            builder.Services.AddScoped<IAirportService, AirportService>();
+            builder.Services.AddScoped<IAirportRepository, AirportRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
