@@ -60,5 +60,83 @@ namespace Finder.Application.Services
             };
             await _airportInterface.AddAirport(airport);
         }
+        public async Task UpdateAirportAsync(EditAirportDto editAirport)
+        {
+            var airport = await _airportInterface.GetAirportByIdAsync(editAirport.AirportId);
+
+            if (airport == null)
+            {
+                throw new KeyNotFoundException($"Airport with ID {editAirport.AirportId} not found.");
+            }
+            airport.AirportId = editAirport.AirportId;
+            airport.Latitude = editAirport.Latitude;
+            airport.Longitude = editAirport.Longitude;
+            airport.Timezone = editAirport.Timezone;
+            airport.Dst = editAirport.Dst;
+            airport.TzDatabaseTimezone = editAirport.TzDatabaseTimezone;
+            airport.Type = editAirport.Type;
+            airport.Source = editAirport.Source;
+            
+            await _airportInterface.UpdateAirportAsync(airport);
+        }
+        public async Task<EditAirportDto> GetAirportByIdAsync(Guid id)
+        {
+            var airport = await _airportInterface.GetAirportByIdAsync(id);
+            if (airport == null)
+            {
+                return null;
+            }
+            return new EditAirportDto
+            {
+                AirportId = airport.AirportId,
+                Latitude = airport.Latitude,
+                Longitude = airport.Longitude,
+                Timezone = airport.Timezone,
+                Dst = airport.Dst,
+                TzDatabaseTimezone = airport.TzDatabaseTimezone,
+                Type = airport.Type,
+                Source = airport.Source
+            };
+        }
+        public async Task<AirportDetailsDto> GetAirportDetails(Guid id)
+        {
+            var airport = await _airportInterface.GetAirportByIdAsync(id);
+            if (airport == null)
+            {
+                return null;
+            }
+            var airportDetails = new AirportDetailsDto
+            {
+                AirportId = airport.AirportId,
+                Name = airport.Name,
+                City = airport.City,
+                Country = airport.Country,
+                IataCode = airport.IataCode,
+                IcaoCode = airport.IcaoCode,
+                Latitude = airport.Latitude,
+                Longitude = airport.Longitude,
+                Altitude = airport.Altitude,
+                Timezone = airport.Timezone,
+                Dst = airport.Dst,
+                TzDatabaseTimezone = airport.TzDatabaseTimezone,
+                Type = airport.Type,
+                Source = airport.Source,
+                DepartingFlights = (airport.DepartingFlights ?? new List<Flight>())
+            .Select(f => new FlightDetailsViewModel
+            {
+                    SourceAirport = airport.Name,
+                    DestinationAirport = f.DestinationAirportNavigation?.Name ?? "Unknown",
+                    Airline = f.airline?.Name ?? "Unknown"
+                }).ToList(),
+                ArrivingFlights = (airport.ArrivingFlights ?? new List<Flight>())
+            .Select(f => new FlightDetailsViewModel
+            {
+                    SourceAirport = f.SourceAirportNavigation?.Name ?? "Unknown",
+                    DestinationAirport = airport.Name,
+                    Airline = f.airline?.Name ?? "Unknown"
+                }).ToList()
+            };
+            return airportDetails;
+        }
     }
 }

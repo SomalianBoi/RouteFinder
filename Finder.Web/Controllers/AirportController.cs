@@ -52,5 +52,56 @@ namespace Finder.Web.Controllers
                 return RedirectToAction("Index", new { id });
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var editAirportDto = await _airportService.GetAirportByIdAsync(id);
+
+            if (editAirportDto == null)
+            {
+                return NotFound($"Airport with ID {id} not found.");
+            }
+            return View(editAirportDto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditAirportDto editAirportDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(editAirportDto);
+            }
+            try
+            {
+                await _airportService.UpdateAirportAsync(editAirportDto);
+                return RedirectToAction("Index");
+            }catch (KeyNotFoundException ex) 
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(editAirportDto);
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected errors
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred.");
+                return View(editAirportDto);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            // Retrieve the airport details from the service
+            var airport = await _airportService.GetAirportDetails(id);
+
+            if (airport == null)
+            {
+                // Return a 404 Not Found view if the airport is not found
+                return NotFound($"Airport with ID {id} not found.");
+            }
+
+            // Pass the airport details to the view
+            return View(airport);
+        }
     }
 }

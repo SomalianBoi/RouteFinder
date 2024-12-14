@@ -12,5 +12,9 @@ namespace Finder.Domain.RepoInterfaces
         Task<IEnumerable<Airport>> GetAllAirportsAsync();
         Task AddAirport (Airport airport);
         Task DeleteAirportAsync (Guid airportId);
+        Task UpdateAirportAsync(Airport airport);
+        Task<Airport> GetAirportByIdAsync(Guid Airport);
+        Task<Airport> GetAirportDetailsAsync(Guid Airport);
+
     }
 }

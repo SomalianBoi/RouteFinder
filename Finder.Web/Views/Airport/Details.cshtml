@@ -1,0 +1,69 @@
+﻿@model Finder.Application.DTOs.AirportDtos.AirportDetailsDto
+
+@{
+    ViewData["Title"] = "Airport Details";
+}
+
+<h2>Airport Details</h2>
+
+<div>
+    <h3>@Model.Name</h3>
+    <p><strong>City:</strong> @Model.City</p>
+    <p><strong>Country:</strong> @Model.Country</p>
+    <p><strong>IATA Code:</strong> @Model.IataCode</p>
+    <p><strong>ICAO Code:</strong> @Model.IcaoCode</p>
+    <p><strong>Latitude:</strong> @Model.Latitude</p>
+    <p><strong>Longitude:</strong> @Model.Longitude</p>
+    <p><strong>Altitude:</strong> @Model.Altitude ft</p>
+    <p><strong>Timezone:</strong> UTC @Model.Timezone</p>
+    <p><strong>Daylight Savings Time:</strong> @Model.Dst</p>
+    <p><strong>Timezone Database:</strong> @Model.TzDatabaseTimezone</p>
+    <p><strong>Type:</strong> @Model.Type</p>
+    <p><strong>Source:</strong> @Model.Source</p>
+</div>
+
+<hr />
+
+<h3>Departing Flights</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Source Airport</th>
+            <th>Destination Airport</th>
+            <th>Airline</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var flight in Model.DepartingFlights)
+        {
+            <tr>
+                <td>@flight.SourceAirport</td>
+                <td>@flight.DestinationAirport</td>
+                <td>@flight.Airline</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h3>Arriving Flights</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Source Airport</th>
+            <th>Destination Airport</th>
+            <th>Airline</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var flight in Model.ArrivingFlights)
+        {
+            <tr>
+                <td>@flight.SourceAirport</td>
+                <td>@flight.DestinationAirport</td>
+                <td>@flight.Airline</td>
+            </tr>
+        }
+    </tbody>
+</table>

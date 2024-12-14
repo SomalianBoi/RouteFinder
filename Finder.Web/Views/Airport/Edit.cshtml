@@ -1,0 +1,90 @@
+﻿@model Finder.Application.DTOs.AirportDtos.EditAirportDto
+
+@{
+    ViewData["Title"] = "Edit Airport";
+}
+
+<h2>Edit Airport</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="AirportId" class="control-label">Airport ID</label>
+        <input asp-for="AirportId" class="form-control" readonly />
+        <span asp-validation-for="AirportId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Latitude" class="control-label">Latitude</label>
+        <input asp-for="Latitude" class="form-control" />
+        <span asp-validation-for="Latitude" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Longitude" class="control-label">Longitude</label>
+        <input asp-for="Longitude" class="form-control" />
+        <span asp-validation-for="Longitude" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Altitude" class="control-label">Altitude (ft)</label>
+        <input asp-for="Altitude" class="form-control" />
+        <span asp-validation-for="Altitude" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Timezone" class="control-label">Timezone (UTC Offset)</label>
+        <input asp-for="Timezone" class="form-control" />
+        <span asp-validation-for="Timezone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Dst" class="control-label">Daylight Savings Time</label>
+        <select asp-for="Dst" class="form-control">
+            <option value="">Select DST</option>
+            <option value="E">Europe</option>
+            <option value="A">Australia</option>
+            <option value="S">South America</option>
+            <option value="O">Other</option>
+            <option value="Z">Zulu/UTC</option>
+            <option value="N">None</option>
+            <option value="U">Unknown</option>
+        </select>
+        <span asp-validation-for="Dst" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TzDatabaseTimezone" class="control-label">Timezone Database</label>
+        <input asp-for="TzDatabaseTimezone" class="form-control" />
+        <span asp-validation-for="TzDatabaseTimezone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Type" class="control-label">Type</label>
+        <select asp-for="Type" class="form-control">
+            <option value="">Select Type</option>
+            <option value="airport">Airport</option>
+            <option value="station">Train Station</option>
+            <option value="port">Ferry Terminal</option>
+            <option value="unknown">Unknown</option>
+        </select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Source" class="control-label">Source</label>
+        <select asp-for="Source" class="form-control">
+            <option value="">Select Source</option>
+            <option value="OurAirports">OurAirports</option>
+            <option value="Legacy">Legacy</option>
+            <option value="User">User</option>
+        </select>
+        <span asp-validation-for="Source" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

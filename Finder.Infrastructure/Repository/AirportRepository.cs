@@ -44,5 +44,32 @@ namespace Finder.Infrastructure.Repository
             _context.Airports.Remove(airport);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateAirportAsync(Airport airport)
+        {
+            _context.Airports.Update(airport);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<Airport> GetAirportByIdAsync(Guid id)
+        {
+            return await _context.Airports
+                .Include(a => a.ArrivingFlights)
+                .ThenInclude(f => f.SourceAirportNavigation)
+                .Include(a => a.DepartingFlights)
+                .ThenInclude(f => f.DestinationAirportNavigation)
+                .Include(a => a.ArrivingFlights)
+                .ThenInclude(f => f.airline)
+                .Include(a => a.DepartingFlights)
+                .ThenInclude(f => f.airline)
+                .FirstOrDefaultAsync(a => a.AirportId == id);
+        }
+        public async Task<Airport> GetAirportDetailsAsync(Guid airportId)
+        {
+            return await _context.Airports
+                .Include(a => a.ArrivingFlights)
+                .ThenInclude(f => f.SourceAirportNavigation)
+                .Include(a => a.DepartingFlights)
+                .ThenInclude(f => f.DestinationAirportNavigation)
+                .FirstOrDefaultAsync(a => a.AirportId == airportId);
+        }
     }
 }
