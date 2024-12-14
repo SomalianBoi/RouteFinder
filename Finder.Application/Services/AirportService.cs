@@ -122,15 +122,18 @@ namespace Finder.Application.Services
                 Type = airport.Type,
                 Source = airport.Source,
                 DepartingFlights = (airport.DepartingFlights ?? new List<Flight>())
-            .Select(f => new FlightDetailsViewModel
-            {
+                .Where(f => f.airline != null && f.airline.IsActive)
+                .Select(f => new FlightDetailsViewModel
+                {
                     SourceAirport = airport.Name,
                     DestinationAirport = f.DestinationAirportNavigation?.Name ?? "Unknown",
                     Airline = f.airline?.Name ?? "Unknown"
                 }).ToList(),
+
                 ArrivingFlights = (airport.ArrivingFlights ?? new List<Flight>())
-            .Select(f => new FlightDetailsViewModel
-            {
+                .Where(f => f.airline != null && f.airline.IsActive) 
+                .Select(f => new FlightDetailsViewModel
+                {
                     SourceAirport = f.SourceAirportNavigation?.Name ?? "Unknown",
                     DestinationAirport = airport.Name,
                     Airline = f.airline?.Name ?? "Unknown"

@@ -13,5 +13,6 @@ namespace Finder.Application.Interfaces
         Task CreateAirlineAsync(CreateAirlineViewModel airline);
         Task<AirlineDetailsDto> GetDetailsForIdAsync(Guid id);
         Task DeleteAirlineAsync(Guid airlineId);
+        Task EditAirlineAsync(EditAirlineViewModel editAirlineDto);
     }
 }

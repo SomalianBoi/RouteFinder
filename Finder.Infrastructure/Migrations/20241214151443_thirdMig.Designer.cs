@@ -4,6 +4,7 @@ using Finder.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Finder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241214151443_thirdMig")]
+    partial class thirdMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,7 +67,7 @@ namespace Finder.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            AirlineId = new Guid("2eab97ee-0a2a-46d5-a563-a56aa12a74bb"),
+                            AirlineId = new Guid("8936f2ce-b062-49df-a601-b80c940cdfb7"),
                             Alias = "EA",
                             Callsign = "EXAMPLE",
                             Country = "USA",
@@ -137,7 +140,7 @@ namespace Finder.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            AirportId = new Guid("e9c42fb9-a516-482c-8a4d-1b597ea5c2ed"),
+                            AirportId = new Guid("e580fad6-b0df-4a66-8ef5-949d37ad0791"),
                             Altitude = 13,
                             City = "New York",
                             Country = "USA",
@@ -150,7 +153,7 @@ namespace Finder.Infrastructure.Migrations
                         },
                         new
                         {
-                            AirportId = new Guid("b389ca2f-c62a-495f-946c-d646f4b22ff0"),
+                            AirportId = new Guid("3e2a9dea-831c-4b00-b0a7-494b79a6e36c"),
                             Altitude = 125,
                             City = "Los Angeles",
                             Country = "USA",
@@ -204,12 +207,12 @@ namespace Finder.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            FlightId = new Guid("ac426ace-9e39-4438-8b72-e042c1101027"),
-                            AirlineId = new Guid("2eab97ee-0a2a-46d5-a563-a56aa12a74bb"),
-                            DestinationAirportId = new Guid("b389ca2f-c62a-495f-946c-d646f4b22ff0"),
+                            FlightId = new Guid("b6429e26-b92d-4916-baf7-b86d91124876"),
+                            AirlineId = new Guid("8936f2ce-b062-49df-a601-b80c940cdfb7"),
+                            DestinationAirportId = new Guid("3e2a9dea-831c-4b00-b0a7-494b79a6e36c"),
                             DurationInMinutes = 380,
-                            PlaneId = new Guid("506fdf88-ed38-49bb-9075-2ec2da497826"),
-                            SourceAirportId = new Guid("e9c42fb9-a516-482c-8a4d-1b597ea5c2ed"),
+                            PlaneId = new Guid("151ec7b6-122c-4267-a89a-655fc7c0a847"),
+                            SourceAirportId = new Guid("e580fad6-b0df-4a66-8ef5-949d37ad0791"),
                             Stops = 0
                         });
                 });
@@ -242,7 +245,7 @@ namespace Finder.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            PlaneId = new Guid("506fdf88-ed38-49bb-9075-2ec2da497826"),
+                            PlaneId = new Guid("151ec7b6-122c-4267-a89a-655fc7c0a847"),
                             IATACode = "73G",
                             ICAOCode = "B737",
                             Name = "Boeing 737"
@@ -254,25 +257,25 @@ namespace Finder.Infrastructure.Migrations
                     b.HasOne("Finder.Domain.Entities.Airline", "airline")
                         .WithMany("Flights")
                         .HasForeignKey("AirlineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Finder.Domain.Entities.Airport", "DestinationAirportNavigation")
                         .WithMany("ArrivingFlights")
                         .HasForeignKey("DestinationAirportId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Finder.Domain.Entities.Plane", "plane")
                         .WithMany("Flights")
                         .HasForeignKey("PlaneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Finder.Domain.Entities.Airport", "SourceAirportNavigation")
                         .WithMany("DepartingFlights")
                         .HasForeignKey("SourceAirportId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("DestinationAirportNavigation");

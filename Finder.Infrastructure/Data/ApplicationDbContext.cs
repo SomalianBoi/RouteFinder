@@ -169,7 +169,8 @@ namespace Finder.Infrastructure.Data
                     SourceAirportId = sourceAirportId,
                     DestinationAirportId = destinationAirportId,
                     PlaneId = planeId,
-                    Stops = 0
+                    Stops = 0,
+                    DurationInMinutes = 380
                 });
             });
         }

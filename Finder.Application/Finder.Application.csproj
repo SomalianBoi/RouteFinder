@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Finder.Domain\Finder.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\FlightDtos\" />
-  </ItemGroup>
-
 </Project>

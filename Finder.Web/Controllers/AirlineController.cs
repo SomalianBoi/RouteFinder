@@ -1,5 +1,7 @@
 ﻿using Finder.Application.DTOs.AirlineDtos;
+using Finder.Application.DTOs.AirportDtos;
 using Finder.Application.Interfaces;
+using Finder.Application.Services;
 using Finder.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +62,51 @@ namespace Finder.Web.Controllers
                 return RedirectToAction("Details", new {id});
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid airlineId)
+        {
+            var airline = await _airlineService.GetDetailsForIdAsync(airlineId);
+
+            if (airline == null)
+            {
+                return NotFound(); // If no airline is found, return 404
+            }
+
+            var editAirlineDto = new EditAirlineViewModel
+            {
+                AirlineId = airline.AirlineId,
+                IsActive = airline.IsActive // Pass the current 'IsActive' state
+            };
+
+            return View(editAirlineDto); // Return the edit view with the airline data
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditAirlineViewModel editAirlineDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(editAirlineDto); // Return to view with validation errors
+            }
+
+            try
+            {
+                await _airlineService.EditAirlineAsync(editAirlineDto); // Update the airline
+                return RedirectToAction("Index"); // Redirect back to the index
+            }
+            catch (KeyNotFoundException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message); // Handle not found error
+                return View(editAirlineDto); // Return with error message
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred."); // Handle unexpected errors
+                return View(editAirlineDto); // Return with error message
+            }
+        }
+
     }
 
 }

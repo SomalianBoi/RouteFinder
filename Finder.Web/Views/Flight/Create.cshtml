@@ -1,0 +1,89 @@
+﻿@model Finder.Application.DTOs.CreateFlightViewModel
+
+@{
+    ViewData["Title"] = "Create Flight";
+}
+
+<h2>Create Flight</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="FlightDto.AirlineId" class="control-label">Airline</label>
+        <select asp-for="FlightDto.AirlineId" class="form-control">
+            <option value="">-- Select Airline --</option>
+            @foreach (var airline in Model.Airlines)
+            {
+                <option value="@airline.AirlineId">@airline.Name</option>
+            }
+        </select>
+        <span asp-validation-for="FlightDto.AirlineId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FlightDto.SourceAirportId" class="control-label">Source Airport</label>
+        <select asp-for="FlightDto.SourceAirportId" class="form-control">
+            <option value="">-- Select Source Airport --</option>
+            @foreach (var airport in Model.Airports)
+            {
+                <option value="@airport.AirportId">@airport.Name (@airport.IcaoCode)</option>
+            }
+        </select>
+        <span asp-validation-for="FlightDto.SourceAirportId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FlightDto.DestinationAirportId" class="control-label">Destination Airport</label>
+        <select asp-for="FlightDto.DestinationAirportId" class="form-control">
+            <option value="">-- Select Destination Airport --</option>
+            @foreach (var airport in Model.Airports)
+            {
+                <option value="@airport.AirportId">@airport.Name (@airport.IcaoCode)</option>
+            }
+        </select>
+        <span asp-validation-for="FlightDto.DestinationAirportId" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="FlightDto.PlaneId" class="control-label">Plane</label>
+        <select asp-for="FlightDto.PlaneId" class="form-control">
+            <option value="">-- Select Plane --</option>
+            @foreach (var plane in Model.Planes)
+            {
+                <option value="@plane.PlaneId">@plane.Model</option>
+            }
+        </select>
+        <span asp-validation-for="FlightDto.PlaneId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FlightDto.DurationInMinutes" class="control-label">Duration (Minutes)</label>
+        <input asp-for="FlightDto.DurationInMinutes" class="form-control" />
+        <span asp-validation-for="FlightDto.DurationInMinutes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (event) {
+                var sourceAirportId = $("#FlightDto_SourceAirportId").val();
+                var destinationAirportId = $("#FlightDto_DestinationAirportId").val();
+
+                if (sourceAirportId === destinationAirportId) {
+                    alert("Source and Destination airports cannot be the same.");
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+    </script>
+}

@@ -13,9 +13,12 @@ namespace Finder.Application.Services
     public class AirlineService : IAirlineService
     {
         private readonly IAirlineRepository _airlineRepository;
-        public AirlineService(IAirlineRepository airlineRepository)
+        private readonly IFlightRepository _flightRepository;
+
+        public AirlineService(IAirlineRepository airlineRepository, IFlightRepository flightRepository)
         {
             _airlineRepository = airlineRepository;
+            _flightRepository = flightRepository;
         }
         public async Task<IEnumerable<AirlineViewModel>> GetAirlines()
         {
@@ -79,5 +82,34 @@ namespace Finder.Application.Services
                 throw new InvalidOperationException(ex.Message);
             }
         }
+        public async Task EditAirlineAsync(EditAirlineViewModel editAirlineDto)
+        {
+            var airline = await _airlineRepository.GetAirlineByIdAsync(editAirlineDto.AirlineId);
+
+            if (airline == null)
+            {
+                throw new ArgumentException("Airline not found.", nameof(editAirlineDto.AirlineId));
+            }
+
+            // Check if the status is being changed
+            if (airline.IsActive != editAirlineDto.IsActive)
+            {
+                if (!editAirlineDto.IsActive) // Transitioning to inactive
+                {
+                    if (airline.Flights != null && airline.Flights.Any())
+                    {
+                        foreach (var flight in airline.Flights.ToList())
+                        {
+                            await _flightRepository.DeleteFlightAsync(flight.FlightId); // Remove associated flights
+                        }
+                    }
+                }
+
+                // Update airline status
+                airline.IsActive = editAirlineDto.IsActive;
+                await _airlineRepository.UpdateAirlineAsync(airline);
+            }
+        }
+
     }
 }

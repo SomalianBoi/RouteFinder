@@ -102,25 +102,32 @@
                     <td>@Html.DisplayFor(modelItem => item.Country)</td>
                     <td>@(item.IsActive ? "Yes" : "No")</td>
                     <td>
-                        @if (item.Flights.Any())
+                        @if (item.IsActive)
                         {
-                            <ul>
-                                @foreach (var flight in item.Flights)
-                                {
-                                    <li>
-                                        @flight.SourceAirportNavigation?.IataCode → @flight.DestinationAirportNavigation?.IataCode
-                                        (Stops: @flight.Stops)
-                                    </li>
-                                }
-                            </ul>
+                            @if (item.Flights.Any())
+                            {
+                                <ul>
+                                    @foreach (var flight in item.Flights)
+                                    {
+                                        <li>
+                                            @flight.SourceAirportNavigation?.IataCode → @flight.DestinationAirportNavigation?.IataCode
+                                            (Stops: @flight.Stops)
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p class="no-flights">No flights yet</p>
+                            }
                         }
                         else
                         {
-                            <p class="no-flights">No flights yet</p>
+                            <p class="no-flights">Airline not active</p>
                         }
                     </td>
                     <td class="button-group">
-                        <a asp-action="Edit" asp-route-id="@item.AirlineId" class="edit">Edit</a>
+                        <a asp-action="Edit" asp-route-airlineId="@item.AirlineId" class="edit">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.AirlineId" class="details">Details</a>
                         <form method="post" asp-action="Delete" asp-controller="Airline">
                             <input type="hidden" name="id" value="@item.AirlineId" />

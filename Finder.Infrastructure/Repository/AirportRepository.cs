@@ -24,8 +24,12 @@ namespace Finder.Infrastructure.Repository
             return await _context.Airports
                 .Include(a => a.ArrivingFlights)
                 .ThenInclude(f => f.SourceAirportNavigation)
+                .Include(a => a.ArrivingFlights)
+                .ThenInclude(f => f.airline)
                 .Include(a => a.DepartingFlights)
                 .ThenInclude(f => f.DestinationAirportNavigation)
+                .Include(a => a.DepartingFlights)
+                .ThenInclude(f => f.airline)
                 .ToListAsync();
         }
         public async Task AddAirport(Airport airport)

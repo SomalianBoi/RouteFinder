@@ -105,7 +105,7 @@
                     <td>@Html.DisplayFor(modelItem => item.IataCode)</td>
                     <td>@Html.DisplayFor(modelItem => item.IcaoCode)</td>
                     <td>
-                        @if (item.DepartingFlights != null && item.DepartingFlights.Any(f => f.SourceAirportNavigation?.AirportId == item.AirportId))
+                        @if (item.DepartingFlights != null && item.DepartingFlights.Any(f => f.SourceAirportNavigation?.AirportId == item.AirportId && f.airline != null && f.airline.IsActive))
                         {
                             @item.DepartingFlights.Count(f => f.SourceAirportNavigation?.AirportId == item.AirportId)
                         }
@@ -115,7 +115,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.ArrivingFlights != null && item.ArrivingFlights.Any(f => f.DestinationAirportNavigation?.AirportId == item.AirportId))
+                        @if (item.ArrivingFlights != null && item.ArrivingFlights.Any(f => f.DestinationAirportNavigation?.AirportId == item.AirportId && f.airline != null && f.airline.IsActive))
                         {
                             @item.ArrivingFlights.Count(f => f.DestinationAirportNavigation?.AirportId == item.AirportId)
                         }

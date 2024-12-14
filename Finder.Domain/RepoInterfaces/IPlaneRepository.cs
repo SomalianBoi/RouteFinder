@@ -12,5 +12,6 @@ namespace Finder.Domain.RepoInterfaces
         Task<IEnumerable<Plane>> GetAllPlanes();
         Task AddPlaneAsync(Plane plane);
         Task DeletePlaneAsync(Guid planeId);
+        Task<Plane> GetPlaneByIdAsync(Guid Airport);
     }
 }

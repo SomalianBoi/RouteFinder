@@ -49,5 +49,16 @@ namespace Finder.Infrastructure.Repository
             _context.Airlines.Remove(airline);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateAirlineAsync(Airline airline)
+        {
+            _context.Airlines.Update(airline);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<Airline> GetAirlineById(Guid airlineId)
+        {
+            return await _context.Airlines
+                                 .Include(a => a.Flights) // Include related flights if necessary
+                                 .FirstOrDefaultAsync(a => a.AirlineId == airlineId);
+        }
     }
 }

@@ -1,0 +1,138 @@
+﻿@model IEnumerable<Finder.Domain.Entities.Flight>
+
+@{
+    ViewData["Title"] = "Flights Index";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        margin: 20px auto;
+        max-width: 900px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    .button-group a {
+        text-decoration: none;
+        margin-right: 10px;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color: white;
+    }
+
+        .button-group a.edit {
+            background-color: #ffc107;
+        }
+
+        .button-group a.details {
+            background-color: #17a2b8;
+        }
+
+        .button-group a.delete {
+            background-color: #dc3545;
+        }
+
+    .no-flights {
+        color: gray;
+        font-style: italic;
+    }
+
+    ul {
+        padding-left: 20px;
+    }
+</style>
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <p>
+        <a asp-action="Create" style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">Create New Flight</a>
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.airline.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.SourceAirportNavigation.Name)</th> <!-- Source Airport Name -->
+                <th>@Html.DisplayNameFor(model => model.DestinationAirportNavigation.Name)</th> <!-- Destination Airport Name -->
+                <th>@Html.DisplayNameFor(model => model.plane.Name)</th> <!-- Plane Name -->
+                <th>@Html.DisplayNameFor(model => model.DurationInMinutes)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.airline.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SourceAirportNavigation.Name)</td> <!-- Source Airport Name -->
+                    <td>@Html.DisplayFor(modelItem => item.DestinationAirportNavigation.Name)</td> <!-- Destination Airport Name -->
+                    <td>@Html.DisplayFor(modelItem => item.plane.Name)</td> <!-- Plane Name -->
+                    <td>
+                        @if (item.DurationInMinutes > 0)
+                        {
+                            var hours = item.DurationInMinutes / 60;
+                            var minutes = item.DurationInMinutes % 60;
+                            @($"{hours}h {minutes}m")
+                        }
+                        else
+                        {
+                            <span class="no-flights">Duration not available</span>
+                        }
+                    </td>
+
+                    <td class="button-group">
+                        <form method="post" asp-action="Delete" asp-controller="Flight">
+                            <input type="hidden" name="id" value="@item.FlightId" />
+                            @Html.AntiForgeryToken()
+                            <button type="button" class="btn btn-danger" onclick="confirmDeletion(this.form)">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDeletion(form) {
+            if (confirm("Are you sure you want to delete this flight?")) {
+                form.submit();
+            }
+        }
+    </script>
+}

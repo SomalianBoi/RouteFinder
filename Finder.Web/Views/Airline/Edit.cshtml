@@ -1,0 +1,20 @@
+﻿@model Finder.Application.DTOs.AirlineDtos.EditAirlineViewModel
+@{
+    ViewData["Title"] = "Edit Airline";
+}
+
+<h1>Edit Airline</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="AirlineId" />
+    <div class="form-group">
+        <label for="IsActive">Is Active</label>
+        <select asp-for="IsActive" class="form-control" id="IsActive" name="IsActive">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

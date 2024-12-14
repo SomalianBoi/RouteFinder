@@ -18,5 +18,7 @@ namespace Finder.Domain.Entities
         public int Stops { get; set; }                     // Number of stops on the route    
         public Guid PlaneId { get; set; }
         public Plane? plane { get; set; } // Reference to the plane
+
+        public int DurationInMinutes { get; set; }
     }
 }

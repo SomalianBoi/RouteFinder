@@ -44,5 +44,9 @@ namespace Finder.Infrastructure.Repository
             _context.Planes.Remove(plane);
             await _context.SaveChangesAsync();
         }
+        public async Task<Plane> GetPlaneByIdAsync(Guid id)
+        {
+            return await _context.Planes.FirstOrDefaultAsync(a => a.PlaneId == id);
+        }
     }
 }

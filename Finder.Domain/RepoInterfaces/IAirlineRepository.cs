@@ -13,5 +13,7 @@ namespace Finder.Domain.RepoInterfaces
         Task addAsync  (Airline airline);
         Task<Airline> GetAirlineByIdAsync(Guid AirlineId);
         Task DeleteAirlineAsync(Guid AirlineId);
+        Task UpdateAirlineAsync(Airline airport);
+        Task<Airline> GetAirlineById(Guid airlineId);
     }
 }
