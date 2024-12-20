@@ -14,5 +14,6 @@ namespace Finder.Application.Interfaces
         Task<IEnumerable<Flight>> GetAllFlightsAsync();
         Task CreateFlightAsync(CreateFlightDto flightDto);
         Task DeleteFlightAsync(Guid flightId);
+        Task<List<DirectFlightDto>> GetDirectFlightAsync(Guid sourceAirportId, Guid destinationAirportId);
     }
 }

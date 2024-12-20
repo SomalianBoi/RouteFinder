@@ -1,4 +1,5 @@
 ﻿using Finder.Application.DTOs;
+using Finder.Application.DTOs.AirportDtos;
 using Finder.Application.DTOs.FlightDtos;
 using Finder.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -75,7 +76,7 @@ namespace Finder.Web.Controllers
                     .ToList();
 
                 model.Airports = (await _airportService.GetAllAirports())
-                    .Select(a => new AirportCreateFlightDto{ AirportId = a.AirportId, Name = $"{a.Name} ({a.IataCode})" })
+                    .Select(a => new AirportCreateFlightDto { AirportId = a.AirportId, Name = $"{a.Name} ({a.IataCode})" })
                     .ToList();
 
                 model.Planes = (await _planeService.GetAllPlanes())
@@ -131,5 +132,40 @@ namespace Finder.Web.Controllers
                 return RedirectToAction("Index", new { id });
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> SearchDirectFlight()
+        {
+            var model = await _airportService.PrepareSearchDirectFlightViewModelAsync();
+            return View(model);  // Return the search form with airports
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SearchDirectFlight(Guid sourceAirportId, Guid destinationAirportId)
+        {
+            // Get the dropdown model
+            var model = await _airportService.PrepareSearchDirectFlightViewModelAsync();
+
+            // Set selected airport ids to the model for maintaining state
+            model.SourceAirportId = sourceAirportId;
+            model.DestinationAirportId = destinationAirportId;
+
+            // Get the list of direct flights between the selected airports
+            var directFlights = await _flightService.GetDirectFlightAsync(sourceAirportId, destinationAirportId);
+
+            if (directFlights == null || !directFlights.Any())
+            {
+                // If no direct flights found, show a message and return the dropdown view with selected airports
+                TempData["Message"] = "No direct flights found between the specified airports.";
+                return View(model);  // Return the dropdown model with the message
+            }
+
+            // If direct flights are found, pass them to the view
+            ViewData["SearchDirectFlight"] = directFlights;
+
+            // Return the same view (or a new one if you want) with the direct flight details
+            return View("DirectFlights", directFlights);  // Show direct flight details in the "DirectFlights" view
+        }
+
     }
 }

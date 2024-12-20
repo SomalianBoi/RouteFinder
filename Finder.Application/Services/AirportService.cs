@@ -1,4 +1,5 @@
 ﻿using Finder.Application.DTOs.AirportDtos;
+using Finder.Application.DTOs.FlightDtos;
 using Finder.Application.Interfaces;
 using Finder.Domain.Entities;
 using Finder.Domain.RepoInterfaces;
@@ -140,6 +141,18 @@ namespace Finder.Application.Services
                 }).ToList()
             };
             return airportDetails;
+        }
+        public async Task<AirportDropDownList> PrepareSearchDirectFlightViewModelAsync()
+        {
+            var airports = await GetAllAirports(); // Assuming this method fetches all airports
+            return new AirportDropDownList
+            {
+                Airports = airports.Select(a => new AirportCreateFlightDto
+                {
+                    AirportId = a.AirportId,
+                    Name = $"{a.Name} ({a.IataCode})"
+                }).ToList()
+            };
         }
     }
 }

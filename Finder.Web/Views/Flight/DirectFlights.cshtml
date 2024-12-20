@@ -1,0 +1,25 @@
+﻿@model List<Finder.Application.DTOs.FlightDtos.DirectFlightDto>
+
+<h2>Direct Flight Details</h2>
+
+@if (Model != null && Model.Any())
+{
+    <h3>Direct Flights Found:</h3>
+    @foreach (var flight in Model)
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Airline: @flight.AirlineName</h5>
+                <p class="card-text">
+                    <strong>Source:</strong> @flight.SourceAirport<br>
+                    <strong>Destination:</strong> @flight.DestinationAirport<br>
+                    <strong>Duration:</strong> @flight.DurationInMinutes minutes
+                </p>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>No direct flights found between the specified airports.</p>
+}

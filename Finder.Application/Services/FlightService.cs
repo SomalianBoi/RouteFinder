@@ -68,5 +68,24 @@ namespace Finder.Application.Services
                 throw new InvalidOperationException(ex.Message);
             }
         }
+        public async Task<List<DirectFlightDto>> GetDirectFlightAsync(Guid sourceAirportId, Guid destinationAirportId)
+        {
+            var flights = await _flightRepository.GetDirectFlightAsync(sourceAirportId, destinationAirportId);
+
+            if (flights == null || !flights.Any())
+            {
+                return new List<DirectFlightDto>(); // No flights found
+            }
+
+            return flights.Select(flight => new DirectFlightDto
+            {
+                FlightId = flight.FlightId,
+                AirlineName = flight.airline.Name,
+                SourceAirport = flight.SourceAirportNavigation.Name,
+                DestinationAirport = flight.SourceAirportNavigation.Name,
+                DurationInMinutes = flight.DurationInMinutes
+            }).ToList();
+        }
+
     }
 }

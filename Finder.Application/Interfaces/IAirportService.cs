@@ -17,5 +17,6 @@ namespace Finder.Application.Interfaces
         Task UpdateAirportAsync(EditAirportDto airportDto);
         Task<EditAirportDto> GetAirportByIdAsync(Guid id);
         Task<AirportDetailsDto> GetAirportDetails(Guid id);
+        Task<AirportDropDownList> PrepareSearchDirectFlightViewModelAsync();
     }
 }

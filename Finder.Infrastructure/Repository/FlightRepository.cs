@@ -44,5 +44,15 @@ namespace Finder.Infrastructure.Repository
             _context.Flights.Remove(flight);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Flight>> GetDirectFlightAsync(Guid sourceAirportId, Guid destinationAirportId)
+        {
+            return await _context.Flights
+                .Include(f => f.airline)                     // Assuming you want to include airline details
+                .Include(f => f.SourceAirportNavigation)     // Include source airport details
+                .Include(f => f.DestinationAirportNavigation) // Include destination airport details
+                .Where(f => f.SourceAirportId == sourceAirportId && f.DestinationAirportId == destinationAirportId)
+                .ToListAsync(); // Retrieves all flights, not just the first one
+        }
+
     }
 }

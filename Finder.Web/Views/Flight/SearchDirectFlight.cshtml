@@ -1,0 +1,52 @@
+﻿@model Finder.Application.DTOs.AirportDtos.AirportDropDownList
+<h2>Search for Direct Flights</h2>
+
+<!-- Button to reveal the dropdown lists -->
+<button id="showSearchForm" class="btn btn-primary mb-3">Search Direct Flights</button>
+
+<!-- Search form -->
+<div id="searchForm" class="d-none">
+    <form method="post" asp-action="SearchDirectFlight">
+        <div class="form-group">
+            <label for="sourceAirportId">Source Airport</label>
+            <select id="sourceAirportId" name="sourceAirportId" class="form-control" required>
+                <option value="" disabled selected>Select a source airport</option>
+                @foreach (var airport in Model.Airports)
+                {
+                    <option value="@airport.AirportId">@airport.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="destinationAirportId">Destination Airport</label>
+            <select id="destinationAirportId" name="destinationAirportId" class="form-control" required>
+                <option value="" disabled selected>Select a destination airport</option>
+                @foreach (var airport in Model.Airports)
+                {
+                    <option value="@airport.AirportId">@airport.Name</option>
+                }
+            </select>
+        </div>
+
+        <!-- Submit button for the form -->
+        <button type="submit" class="btn btn-success mt-3">Search</button>
+    </form>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-warning mt-3">
+        @TempData["Message"]
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("showSearchForm").addEventListener("click", function () {
+            // When the button is clicked, show the form and hide the button
+            document.getElementById("searchForm").classList.remove("d-none");
+            this.classList.add("d-none");
+        });
+    </script>
+}
