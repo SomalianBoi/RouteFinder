@@ -53,6 +53,17 @@ namespace Finder.Infrastructure.Repository
                 .Where(f => f.SourceAirportId == sourceAirportId && f.DestinationAirportId == destinationAirportId)
                 .ToListAsync(); // Retrieves all flights, not just the first one
         }
+        public async Task<List<Flight>> GetFlightsByAirlineAndPlaneAsync(Guid airlineId, Guid planeId)
+        {
+            return await _context.Flights
+                .Include(f => f.airline)                     // Include airline details
+                .Include(f => f.SourceAirportNavigation)     // Include source airport details
+                .Include(f => f.DestinationAirportNavigation) // Include destination airport details
+                .Include(f => f.plane)                       // Include plane details
+                .Where(f => f.AirlineId == airlineId && f.PlaneId == planeId)
+                .ToListAsync();
+        }
+
 
     }
 }

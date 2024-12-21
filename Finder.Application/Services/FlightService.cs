@@ -86,6 +86,24 @@ namespace Finder.Application.Services
                 DurationInMinutes = flight.DurationInMinutes
             }).ToList();
         }
+        public async Task<List<FlightDto>> GetFlightsByAirlineAndPlaneAsync(Guid airlineId, Guid planeId)
+        {
+            // Fetch flights from the repository
+            var flights = await _flightRepository.GetFlightsByAirlineAndPlaneAsync(airlineId, planeId);
 
+            // Map the flights to FlightDto
+            var flightDtos = flights.Select(f => new FlightDto
+            {
+                FlightId = f.FlightId,
+                AirlineName = f.airline.Name,
+                SourceAirportIataCode = f.SourceAirportNavigation.IataCode,
+                DestinationAirportIataCode = f.DestinationAirportNavigation.IataCode,
+                PlaneModel = f.plane.Name,
+                DurationInMinutes = f.DurationInMinutes,
+                Stops = f.Stops
+            }).ToList();
+
+            return flightDtos;
+        }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model Finder.Application.DTOs.FilterFlightsByPlaneAndAirlineViewModel
+
+<h2>Flight Results</h2>
+
+@if (Model.Flights != null && Model.Flights.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Airline</th>
+                <th>Source Airport</th>
+                <th>Destination Airport</th>
+                <th>Plane Model</th>
+                <th>Duration</th>
+                <th>Stops</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var flight in Model.Flights)
+            {
+                <tr>
+                    <td>@flight.AirlineName</td>
+                    <td>@flight.SourceAirportIataCode</td>
+                    <td>@flight.DestinationAirportIataCode</td>
+                    <td>@flight.PlaneModel</td>
+                    <td>@flight.DurationFormatted</td>
+                    <td>@flight.Stops</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No flights found for the selected criteria.</p>
+}

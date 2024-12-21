@@ -155,16 +155,82 @@ namespace Finder.Web.Controllers
 
             if (directFlights == null || !directFlights.Any())
             {
-                // If no direct flights found, show a message and return the dropdown view with selected airports
+                
                 TempData["Message"] = "No direct flights found between the specified airports.";
-                return View(model);  // Return the dropdown model with the message
+                return View(model);  
             }
-
-            // If direct flights are found, pass them to the view
             ViewData["SearchDirectFlight"] = directFlights;
 
-            // Return the same view (or a new one if you want) with the direct flight details
-            return View("DirectFlights", directFlights);  // Show direct flight details in the "DirectFlights" view
+            return View("DirectFlights", directFlights);  
+        }
+        [HttpGet]
+        public async Task<IActionResult> SearchFlightsByAirlineAndPlane()
+        {
+            var airlinesModel = await _airlineService.GetAirlines(); // Service method to fetch airlines
+            var planesModel = await _planeService.GetAllPlanes();       // Service method to fetch planes
+
+            var airlines = airlinesModel.Select(a => new AirlineCreateFlightDto
+            {
+                AirlineId = a.AirlineId,
+                Name = a.Name
+            }).ToList();
+
+            var planes = planesModel.Select(p => new PlaneCreateFlightDto
+            {
+                PlaneId = p.PlaneId,
+                Model = p.Name
+            }).ToList();
+
+            var model = new FilterFlightsByPlaneAndAirlineViewModel
+            {
+                Airlines = airlines,
+                Planes = planes,
+                Flights = new List<FlightDto>() // Initialize empty list for flights
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SearchFlightsByAirlineAndPlane(Guid? airlineId, Guid? planeId)
+        {
+            // Fetch airlines and planes from services
+            var airlinesModel = await _airlineService.GetAirlines();
+            var planesModel = await _planeService.GetAllPlanes();
+
+            var airlines = airlinesModel.Select(a => new AirlineCreateFlightDto
+            {
+                AirlineId = a.AirlineId,
+                Name = a.Name
+            }).ToList();
+
+            var planes = planesModel.Select(p => new PlaneCreateFlightDto
+            {
+                PlaneId = p.PlaneId,
+                Model = p.Name
+            }).ToList();
+
+            // Fetch flights based on selected filters
+            var flights = await _flightService.GetFlightsByAirlineAndPlaneAsync(airlineId ?? Guid.Empty, planeId ?? Guid.Empty);
+
+            // Prepare the view model
+            var model = new FilterFlightsByPlaneAndAirlineViewModel
+            {
+                Airlines = airlines,
+                Planes = planes,
+                Flights = flights,
+                SelectedAirlineId = airlineId,  // Set selected airline filter
+                SelectedPlaneId = planeId      // Set selected plane filter
+            };
+
+            // If no flights are found, display a message in TempData (optional)
+            if (!flights.Any())
+            {
+                TempData["Message"] = "No flights found matching the selected criteria.";
+            }
+
+            // Return the view with the model populated with filters and flight data
+            return View("SearchResults", model);
         }
 
     }

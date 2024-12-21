@@ -1,0 +1,53 @@
+﻿@model Finder.Application.DTOs.FilterFlightsByPlaneAndAirlineViewModel
+
+<h2>Search Flights by Airline and Plane</h2>
+
+<!-- Button to reveal the dropdown lists -->
+<button id="showSearchForm" class="btn btn-primary mb-3">Search Flights</button>
+
+<!-- Search form -->
+<div id="searchForm" class="d-none">
+    <form method="post" asp-action="SearchFlightsByAirlineAndPlane">
+        <div class="form-group">
+            <label for="airlineId">Select Airline</label>
+            <select id="airlineId" name="airlineId" class="form-control" required>
+                <option value="" disabled selected>Select an airline</option>
+                @foreach (var airline in Model.Airlines)
+                {
+                    <option value="@airline.AirlineId" selected="@(airline.AirlineId == Model.SelectedAirlineId ? "selected" : "")">@airline.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="planeId">Select Plane</label>
+            <select id="planeId" name="planeId" class="form-control" required>
+                <option value="" disabled selected>Select a plane</option>
+                @foreach (var plane in Model.Planes)
+                {
+                    <option value="@plane.PlaneId" selected="@(plane.PlaneId == Model.SelectedPlaneId ? "selected" : "")">@plane.Model</option>
+                }
+            </select>
+        </div>
+
+        <!-- Submit button for the form -->
+        <button type="submit" class="btn btn-success mt-3">Search Flights</button>
+    </form>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-warning mt-3">
+        @TempData["Message"]
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("showSearchForm").addEventListener("click", function () {
+            // When the button is clicked, show the form and hide the button
+            document.getElementById("searchForm").classList.remove("d-none");
+            this.classList.add("d-none");
+        });
+    </script>
+}
