@@ -1,42 +1,86 @@
 ﻿@model Finder.Application.DTOs.AirportDtos.CreateAirportDto
 
 @{
-    ViewData["Title"] = "Create Airline";
+    ViewData["Title"] = "Create Airport";
 }
 
-<h2>Create Airline</h2>
+<h2>Create Airport</h2>
 
-<form asp-action="Create" method="post">
+<form id="createAirportForm" asp-action="Create" method="post">
+    <!-- Airport Name -->
     <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
+        <label asp-for="Name" class="control-label">Name *</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter airport name" />
+        <small class="form-text text-muted">The full name of the airport (e.g., 'Los Angeles International Airport').</small>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
+    <!-- City -->
     <div class="form-group">
-        <label asp-for="City" class="control-label"></label>
-        <input asp-for="City" class="form-control" />
+        <label asp-for="City" class="control-label">City *</label>
+        <input asp-for="City" class="form-control" placeholder="Enter city name" />
+        <small class="form-text text-muted">The city where the airport is located (e.g., 'Los Angeles').</small>
         <span asp-validation-for="City" class="text-danger"></span>
     </div>
 
+    <!-- IATA Code -->
     <div class="form-group">
-        <label asp-for="IataCode" class="control-label"></label>
-        <input asp-for="IataCode" class="form-control" />
+        <label asp-for="IataCode" class="control-label">IATA Code *</label>
+        <input id="IataCode" asp-for="IataCode" class="form-control" placeholder="3-letter IATA code (e.g., 'LAX')" maxlength="3" />
+        <small class="form-text text-muted">International Air Transport Association code (3 letters).</small>
+        <div id="iataCounter" class="text-muted">3 characters remaining</div>
         <span asp-validation-for="IataCode" class="text-danger"></span>
     </div>
 
+    <!-- ICAO Code -->
     <div class="form-group">
-        <label asp-for="IcaoCode" class="control-label"></label>
-        <input asp-for="IcaoCode" class="form-control" />
+        <label asp-for="IcaoCode" class="control-label">ICAO Code *</label>
+        <input id="IcaoCode" asp-for="IcaoCode" class="form-control" placeholder="4-letter ICAO code (e.g., 'KLAX')" maxlength="4" />
+        <small class="form-text text-muted">International Civil Aviation Organization code (4 letters).</small>
+        <div id="icaoCounter" class="text-muted">4 characters remaining</div>
         <span asp-validation-for="IcaoCode" class="text-danger"></span>
     </div>
 
+    <!-- Country -->
     <div class="form-group">
-        <label asp-for="Country" class="control-label"></label>
-        <input asp-for="Country" class="form-control" />
+        <label asp-for="Country" class="control-label">Country *</label>
+        <input asp-for="Country" class="form-control" placeholder="Enter country name" />
+        <small class="form-text text-muted">The country where the airport is located (e.g., 'United States').</small>
         <span asp-validation-for="Country" class="text-danger"></span>
     </div>
 
+    <!-- Submit Button -->
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    <script>
+        // Character counters for IATA and ICAO codes
+        document.getElementById("IataCode").addEventListener("input", function () {
+            const remaining = 3 - this.value.length;
+            document.getElementById("iataCounter").textContent = `${remaining} characters remaining`;
+        });
+
+        document.getElementById("IcaoCode").addEventListener("input", function () {
+            const remaining = 4 - this.value.length;
+            document.getElementById("icaoCounter").textContent = `${remaining} characters remaining`;
+        });
+
+        // Form validation on submit
+        document.getElementById("createAirportForm").addEventListener("submit", function (e) {
+            const requiredFields = ["Name", "City", "IataCode", "IcaoCode", "Country"];
+            let isValid = true;
+
+            requiredFields.forEach((field) => {
+                const input = document.getElementById(field);
+                if (!input || !input.value.trim()) {
+                    alert(`${field} is required.`);
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) e.preventDefault();
+        });
+    </script>
+}

@@ -14,5 +14,6 @@ namespace Finder.Domain.RepoInterfaces
         Task DeleteFlightAsync(Guid flightId);
         Task<List<Flight>> GetDirectFlightAsync(Guid sourceAirportId, Guid destinationAirportId);
         Task<List<Flight>> GetFlightsByAirlineAndPlaneAsync(Guid airlineId, Guid planeId);
+        Task<List<List<Flight>>> GetConnectingFlightsAsync(Guid sourceAirportId, Guid destinationAirportId);
     }
 }

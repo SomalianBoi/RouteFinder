@@ -1,0 +1,41 @@
+﻿@model List<Finder.Application.DTOs.RouteDto>
+
+<h2>Available Routes</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No routes available for the selected airports.</div>
+}
+else
+{
+    <div>
+        <h4>Source Airport: @Model.First().Flights.First().SourceAirport</h4>
+        <h4>Destination Airport: @Model.First().Flights.Last().DestinationAirport</h4>
+    </div>
+
+    <hr />
+
+    @foreach (var route in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Route Summary</strong>
+                <p>Total Duration: @route.TotalDuration minutes</p>
+                <p>Stops: @route.Stops</p>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var flight in route.Flights)
+                    {
+                        <li class="list-group-item">
+                            <p><strong>Airline:</strong> @flight.AirlineName</p>
+                            <p><strong>From:</strong> @flight.SourceAirport → <strong>To:</strong> @flight.DestinationAirport</p>
+                            <p><strong>Plane:</strong> @flight.PlaneModel</p>
+                            <p><strong>Duration:</strong> @flight.DurationInMinutes minutes</p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}

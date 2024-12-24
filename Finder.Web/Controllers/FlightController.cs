@@ -232,6 +232,28 @@ namespace Finder.Web.Controllers
             // Return the view with the model populated with filters and flight data
             return View("SearchResults", model);
         }
+        [HttpGet]
+        public async Task<IActionResult> FindRoutes()
+        {
+            // Fetch list of airports for dropdowns
+            var model = await _airportService.PrepareSearchDirectFlightViewModelAsync();
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FindRoutes(Guid sourceAirportId, Guid destinationAirportId)
+        {
+            if (sourceAirportId == Guid.Empty || destinationAirportId == Guid.Empty)
+            {
+                TempData["ErrorMessage"] = "Please select both source and destination airports.";
+                return RedirectToAction("SelectAirports");
+            }
+
+            // Fetch routes between selected airports
+            var routes = await _flightService.FindRoutesBetweenAirportsAsync(sourceAirportId, destinationAirportId);
+
+            return View("DisplayRoutes", routes);
+        }
 
     }
 }

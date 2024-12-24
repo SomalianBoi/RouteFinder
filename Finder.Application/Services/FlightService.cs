@@ -1,4 +1,5 @@
-﻿using Finder.Application.DTOs.FlightDtos;
+﻿using Finder.Application.DTOs;
+using Finder.Application.DTOs.FlightDtos;
 using Finder.Application.Interfaces;
 using Finder.Domain.Entities;
 using Finder.Domain.RepoInterfaces;
@@ -105,5 +106,25 @@ namespace Finder.Application.Services
 
             return flightDtos;
         }
+        public async Task<List<RouteDto>> FindRoutesBetweenAirportsAsync(Guid sourceAirportId, Guid destinationAirportId)
+        {
+            var routes = await _flightRepository.GetConnectingFlightsAsync(sourceAirportId, destinationAirportId);
+
+            return routes.Select(route => new RouteDto
+            {
+                TotalDuration = route.Sum(f => f.DurationInMinutes),
+                Stops = route.Count - 1,
+                Flights = route.Select(f => new ConnectingFlightDto
+                {
+                    FlightId = f.FlightId,
+                    AirlineName = f.airline?.Name,
+                    SourceAirport = f.SourceAirportNavigation?.Name,
+                    DestinationAirport = f.DestinationAirportNavigation?.Name,
+                    PlaneModel = f.plane?.Name,
+                    DurationInMinutes = f.DurationInMinutes
+                }).ToList()
+            }).OrderBy(r => r.TotalDuration).ToList();
+        }
+
     }
 }

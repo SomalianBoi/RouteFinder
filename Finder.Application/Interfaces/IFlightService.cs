@@ -1,4 +1,5 @@
-﻿using Finder.Application.DTOs.AirlineDtos;
+﻿using Finder.Application.DTOs;
+using Finder.Application.DTOs.AirlineDtos;
 using Finder.Application.DTOs.FlightDtos;
 using Finder.Domain.Entities;
 using System;
@@ -16,5 +17,6 @@ namespace Finder.Application.Interfaces
         Task DeleteFlightAsync(Guid flightId);
         Task<List<DirectFlightDto>> GetDirectFlightAsync(Guid sourceAirportId, Guid destinationAirportId);
         Task<List<FlightDto>> GetFlightsByAirlineAndPlaneAsync(Guid airlineId, Guid planeId);
+        Task<List<RouteDto>> FindRoutesBetweenAirportsAsync(Guid sourceAirportId, Guid destinationAirportId);
     }
 }

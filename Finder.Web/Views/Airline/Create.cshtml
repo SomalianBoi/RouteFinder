@@ -6,49 +6,97 @@
 
 <h2>Create Airline</h2>
 
-<form asp-action="Create" method="post">
+<form id="createAirlineForm" asp-action="Create" method="post">
+    <!-- Airline Name -->
     <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
+        <label asp-for="Name" class="control-label">Name *</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter airline name" />
+        <small class="form-text text-muted">The full name of the airline (e.g., 'American Airlines').</small>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
+    <!-- Airline Alias -->
     <div class="form-group">
-        <label asp-for="Alias" class="control-label"></label>
-        <input asp-for="Alias" class="form-control" />
+        <label asp-for="Alias" class="control-label">Alias</label>
+        <input asp-for="Alias" class="form-control" placeholder="Enter an alias (optional)" />
+        <small class="form-text text-muted">An alternative name for the airline (e.g., 'AA' for 'American Airlines').</small>
         <span asp-validation-for="Alias" class="text-danger"></span>
     </div>
 
+    <!-- IATA Code -->
     <div class="form-group">
-        <label asp-for="IATA" class="control-label"></label>
-        <input asp-for="IATA" class="form-control" />
+        <label asp-for="IATA" class="control-label">IATA Code *</label>
+        <input id="IATA" asp-for="IATA" class="form-control" placeholder="2-letter IATA code (e.g., 'AA')" maxlength="2" />
+        <small class="form-text text-muted">International Air Transport Association code (2 letters).</small>
+        <div id="iataCounter" class="text-muted">2 characters remaining</div>
         <span asp-validation-for="IATA" class="text-danger"></span>
     </div>
 
+    <!-- ICAO Code -->
     <div class="form-group">
-        <label asp-for="ICAO" class="control-label"></label>
-        <input asp-for="ICAO" class="form-control" />
+        <label asp-for="ICAO" class="control-label">ICAO Code *</label>
+        <input id="ICAO" asp-for="ICAO" class="form-control" placeholder="3-letter ICAO code (e.g., 'AAL')" maxlength="3" />
+        <small class="form-text text-muted">International Civil Aviation Organization code (3 letters).</small>
+        <div id="icaoCounter" class="text-muted">3 characters remaining</div>
         <span asp-validation-for="ICAO" class="text-danger"></span>
     </div>
 
+    <!-- Callsign -->
     <div class="form-group">
-        <label asp-for="Callsign" class="control-label"></label>
-        <input asp-for="Callsign" class="form-control" />
+        <label asp-for="Callsign" class="control-label">Callsign *</label>
+        <input asp-for="Callsign" class="form-control" placeholder="Enter the callsign (e.g., 'AMERICAN')" />
+        <small class="form-text text-muted">The airline's spoken identifier (e.g., 'AMERICAN' for 'American Airlines').</small>
         <span asp-validation-for="Callsign" class="text-danger"></span>
     </div>
 
+    <!-- Country -->
     <div class="form-group">
-        <label asp-for="Country" class="control-label"></label>
-        <input asp-for="Country" class="form-control" />
+        <label asp-for="Country" class="control-label">Country</label>
+        <input asp-for="Country" class="form-control" placeholder="Enter the country of origin" />
+        <small class="form-text text-muted">The country where the airline is based (e.g., 'United States').</small>
         <span asp-validation-for="Country" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="IsActive" class="control-label"></label>
-        <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+    <!-- Active Status -->
+    <div class="form-group form-check">
+        <input asp-for="IsActive" type="checkbox" class="form-check-input" checked />
+        <label asp-for="IsActive" class="form-check-label">Is Active?</label>
+        <small class="form-text text-muted">Check if the airline is currently operating.</small>
         <span asp-validation-for="IsActive" class="text-danger"></span>
     </div>
 
+    <!-- Submit Button -->
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    <script>
+        // Character counters
+        document.getElementById("IATA").addEventListener("input", function () {
+            const remaining = 2 - this.value.length;
+            document.getElementById("iataCounter").textContent = `${remaining} characters remaining`;
+        });
+
+        document.getElementById("ICAO").addEventListener("input", function () {
+            const remaining = 3 - this.value.length;
+            document.getElementById("icaoCounter").textContent = `${remaining} characters remaining`;
+        });
+
+        // Form validation on submit
+        document.getElementById("createAirlineForm").addEventListener("submit", function (e) {
+            const requiredFields = ["Name", "IATA", "ICAO", "Callsign"];
+            let isValid = true;
+
+            requiredFields.forEach((field) => {
+                const input = document.getElementById(field);
+                if (!input || !input.value.trim()) {
+                    alert(`${field} is required.`);
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) e.preventDefault();
+        });
+    </script>
+}

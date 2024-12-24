@@ -1,0 +1,29 @@
+﻿@model Finder.Application.DTOs.AirportDtos.AirportDropDownList
+
+<h2>Search for Flights</h2>
+
+<form method="post" asp-action="FindRoutes">
+    <div class="form-group">
+        <label for="sourceAirport">Source Airport</label>
+        <select id="sourceAirport" name="sourceAirportId" class="form-control" required>
+            <option value="" disabled selected>Select a source airport</option>
+            @foreach (var airport in Model.Airports)
+            {
+                <option value="@airport.AirportId">@airport.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="destinationAirport">Destination Airport</label>
+        <select id="destinationAirport" name="destinationAirportId" class="form-control" required>
+            <option value="" disabled selected>Select a destination airport</option>
+            @foreach (var airport in Model.Airports)
+            {
+                <option value="@airport.AirportId">@airport.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Find Routes</button>
+</form>

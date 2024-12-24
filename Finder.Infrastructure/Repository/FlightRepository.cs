@@ -64,6 +64,51 @@ namespace Finder.Infrastructure.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<List<Flight>>> GetConnectingFlightsAsync(Guid sourceAirportId, Guid destinationAirportId)
+        {
+            var allFlights = await _context.Flights
+                .Include(f => f.airline)                     // Include airline details
+                .Include(f => f.SourceAirportNavigation)     // Include source airport details
+                .Include(f => f.DestinationAirportNavigation) // Include destination airport details
+                .Include(f => f.plane)                       // Include plane details
+                .ToListAsync();
 
+            // Build adjacency list for the graph
+            var graph = allFlights
+                .GroupBy(f => f.SourceAirportId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(f => new { f.DestinationAirportId, Flight = f }).ToList()
+                );
+
+            // Perform BFS/Dijkstra to find routes
+            var result = new List<List<Flight>>();
+            var queue = new Queue<(Guid Current, List<Flight> Path)>();
+            queue.Enqueue((sourceAirportId, new List<Flight>()));
+
+            while (queue.Count > 0)
+            {
+                var (current, path) = queue.Dequeue();
+
+                if (current == destinationAirportId)
+                {
+                    result.Add(path);
+                    continue;
+                }
+
+                if (!graph.ContainsKey(current)) continue;
+
+                foreach (var edge in graph[current])
+                {
+                    if (!path.Any(f => f.DestinationAirportId == edge.DestinationAirportId))
+                    {
+                        var newPath = new List<Flight>(path) { edge.Flight };
+                        queue.Enqueue((edge.DestinationAirportId, newPath));
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

@@ -1,29 +1,70 @@
 ﻿@model Finder.Application.DTOs.PlaneDtos.CreatePlaneDto
+
 @{
     ViewData["Title"] = "Create Plane";
 }
 
 <h2>Create Plane</h2>
 
-<form asp-action="Create" method="post">
+<form id="createPlaneForm" asp-action="Create" method="post">
+    <!-- Plane Name -->
     <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
+        <label asp-for="Name" class="control-label">Plane Name *</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter the plane's name" />
+        <small class="form-text text-muted">The full name of the plane (e.g., 'Boeing 747').</small>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
+    <!-- ICAO Code -->
     <div class="form-group">
-        <label asp-for="ICAOCode" class="control-label"></label>
-        <input asp-for="ICAOCode" class="form-control" />
+        <label asp-for="ICAOCode" class="control-label">ICAO Code *</label>
+        <input id="ICAOCode" asp-for="ICAOCode" class="form-control" placeholder="Enter the ICAO code (e.g., 'B744')" maxlength="4" />
+        <small class="form-text text-muted">The 4-letter ICAO code (e.g., 'B744').</small>
+        <div id="icaoCounter" class="text-muted">4 characters remaining</div>
         <span asp-validation-for="ICAOCode" class="text-danger"></span>
     </div>
 
+    <!-- IATA Code -->
     <div class="form-group">
-        <label asp-for="IATACode" class="control-label"></label>
-        <input asp-for="IATACode" class="form-control" />
+        <label asp-for="IATACode" class="control-label">IATA Code *</label>
+        <input id="IATACode" asp-for="IATACode" class="form-control" placeholder="Enter the IATA code (e.g., '747')" maxlength="3" />
+        <small class="form-text text-muted">The 3-letter IATA code (e.g., '747').</small>
+        <div id="iataCounter" class="text-muted">3 characters remaining</div>
         <span asp-validation-for="IATACode" class="text-danger"></span>
     </div>
+
+    <!-- Submit Button -->
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
- </form>
+</form>
 
+@section Scripts {
+    <script>
+        // Character counters for ICAO and IATA codes
+        document.getElementById("ICAOCode").addEventListener("input", function () {
+            const remaining = 4 - this.value.length;
+            document.getElementById("icaoCounter").textContent = `${remaining} characters remaining`;
+        });
+
+        document.getElementById("IATACode").addEventListener("input", function () {
+            const remaining = 3 - this.value.length;
+            document.getElementById("iataCounter").textContent = `${remaining} characters remaining`;
+        });
+
+        // Form validation on submit
+        document.getElementById("createPlaneForm").addEventListener("submit", function (e) {
+            const requiredFields = ["Name", "ICAOCode", "IATACode"];
+            let isValid = true;
+
+            requiredFields.forEach((field) => {
+                const input = document.getElementById(field);
+                if (!input || !input.value.trim()) {
+                    alert(`${field} is required.`);
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) e.preventDefault();
+        });
+    </script>
+}
