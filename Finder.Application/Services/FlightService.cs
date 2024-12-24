@@ -83,7 +83,7 @@ namespace Finder.Application.Services
                 FlightId = flight.FlightId,
                 AirlineName = flight.airline.Name,
                 SourceAirport = flight.SourceAirportNavigation.Name,
-                DestinationAirport = flight.SourceAirportNavigation.Name,
+                DestinationAirport = flight.DestinationAirportNavigation.Name,
                 DurationInMinutes = flight.DurationInMinutes
             }).ToList();
         }
